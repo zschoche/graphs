@@ -155,8 +155,8 @@ struct graph {
 	inline void add_edge(int v, int w) {
 		E[v].push_back(w);
 		std::sort(E[v].begin(), E[v].end());
-		E[w].push_back(v);
-		std::sort(E[w].begin(), E[w].end());
+		//E[w].push_back(v);
+		//std::sort(E[w].begin(), E[w].end());
 	}
 	/*
 	inline void remove_edge(int v, int w) { 

@@ -30,7 +30,6 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	auto g = graphs::parse<graph>(s);
-	//std::cout << "Graph G: " << g << std::endl;
 	auto colors = graphs::coloring::backtracking_color<graph>::compute(c_max, g);
 	if(colors) {
 		std::cout << *colors << std::endl;

@@ -81,15 +81,17 @@ template <typename G> struct backtracking_color {
 
 	backtracking_color(unsigned int _colors, const G &_g)
 	    : colors(_colors), graph(_g), selected_colors(_g.vertex_count),
-	      problem(_g.vertex_count, std::vector<int>(_colors+1, -1)), going_back_to(_g.vertex_count) {
-		      selected_colors[0] = 1; //wir setzen die Fabe direkt. es gibt immer eine permutation.
+	      problem(_g.vertex_count, std::vector<int>(_colors + 1, -1)),
+	      going_back_to(_g.vertex_count) {
+		selected_colors[0] = 1; // wir setzen die Fabe direkt. es gibt
+					// immer eine permutation.
 	}
 
 	bool get_coloring(int v) {
 		int c;
 		do {
 			going_back_to = -1;
-			
+
 			c = get_color(v);
 			selected_colors[v] = c;
 			if (c == 0) {
@@ -112,9 +114,11 @@ template <typename G> struct backtracking_color {
 			if (c == 0) { // alles probliert -> geht nicht
 				break;
 			} else {
-				int p = problem[v][c]; // erstmal das letzte problem anschauen.
-				if (p != -1 && p != v && selected_colors[p] == c) {
-					if(p > going_back_to) {
+				int p = problem[v][c]; // erstmal das letzte
+						       // problem anschauen.
+				if (p != -1 && p != v &&
+				    selected_colors[p] == c) {
+					if (p > going_back_to) {
 						going_back_to = p;
 					}
 					invalid_color = true;
@@ -122,12 +126,15 @@ template <typename G> struct backtracking_color {
 					invalid_color = false;
 					for (const auto &w :
 					     graph.neighbours_of(v)) {
-						if(w > v) { // der Rest ist egal
+						if (w >
+						    v) { // der Rest ist egal
 							break;
-						} else if (selected_colors[w] == c) {
+						} else if (selected_colors[w] ==
+							   c) {
 							problem[v][c] = w;
-							if(w > going_back_to) {
-								going_back_to = w;
+							if (w > going_back_to) {
+								going_back_to =
+								    w;
 							}
 							invalid_color = true;
 							break;
@@ -136,7 +143,7 @@ template <typename G> struct backtracking_color {
 				}
 			}
 		} while (invalid_color);
-		if(c != 0)
+		if (c != 0)
 			going_back_to = graph.vertex_count;
 		return c;
 	}
@@ -145,7 +152,7 @@ template <typename G> struct backtracking_color {
 		for (const auto &item : selected_colors) {
 			std::cout << item << ",";
 		}
-		std::cout << "("<< going_back_to << ")" << std::endl;
+		std::cout << "(" << going_back_to << ")" << std::endl;
 	}
 
 	const unsigned int colors;
@@ -154,6 +161,7 @@ template <typename G> struct backtracking_color {
 	std::vector<std::vector<int> > problem;
 	int going_back_to;
 };
+
 
 } /* namespace coloring */
 
