@@ -69,7 +69,7 @@ template <typename G> struct backtracking_color {
 	static inline boost::optional<graph_coloring<G> >
 	compute(unsigned int colors, const G &g) {
 		backtracking_color<G> bc(colors, g);
-		if (bc.get_coloring(1)) {
+		if (bc.get_coloring(0)) {
 			return boost::optional<graph_coloring<G> >(
 			    graph_coloring<G>(&bc.graph, bc.selected_colors));
 		} else {
@@ -83,8 +83,6 @@ template <typename G> struct backtracking_color {
 	    : colors(_colors), graph(_g), selected_colors(_g.vertex_count),
 	      problem(_g.vertex_count, std::vector<int>(_colors + 1, -1)),
 	      going_back_to(_g.vertex_count) {
-		selected_colors[0] = 1; // wir setzen die Fabe direkt. es gibt
-					// immer eine permutation.
 	}
 
 	bool get_coloring(int v) {
@@ -104,18 +102,20 @@ template <typename G> struct backtracking_color {
 		return false;
 	}
 
-	// bis v hat bereits alles eine Fabe. hinter v ist alles egal.
 	int get_color(int v) {
 		int c = selected_colors[v];
+		int colors_count = colors;
+		if(v+1 < colors) { // exclude permutations
+			colors_count = v + 1;
+		}
 		bool invalid_color = true;
 		do {
-			c = (c + 1) % (colors + 1);
+			c = (c + 1) % (colors_count + 1);
 			selected_colors[v] = c;
-			if (c == 0) { // alles probliert -> geht nicht
-				break;
+			if (c == 0) { 
+				break; // can not select a color.
 			} else {
-				int p = problem[v][c]; // erstmal das letzte
-						       // problem anschauen.
+				int p = problem[v][c]; // check the last problem first
 				if (p != -1 && p != v &&
 				    selected_colors[p] == c) {
 					if (p > going_back_to) {
@@ -127,7 +127,7 @@ template <typename G> struct backtracking_color {
 					for (const auto &w :
 					     graph.neighbours_of(v)) {
 						if (w >
-						    v) { // der Rest ist egal
+						    v) { // dont need to check the rest
 							break;
 						} else if (selected_colors[w] ==
 							   c) {

@@ -11,12 +11,6 @@
 
 int main(int argc, char *argv[]) {
 
-	auto a = { 1, 2, 3, 4, 5};
-	auto b = { 1, 2, 3, 4, 5 };
-
-	std::cout << std::includes(a.begin(), a.end(), b.begin(), b.end()) << true << std::endl;
-
-
 	using namespace graphs::list;
 	std::string s = "0:1,2;1:0,3;2:0,3,4;3:1,2,5;4:2,5;5:3,4;;";
 	int c_max = 3;
