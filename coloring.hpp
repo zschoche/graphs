@@ -33,7 +33,7 @@ template <typename G> struct graph_coloring {
 		return s.substr(0, s.size() - 1);
 	}
 
-	inline std::size_t count() const {}
+	inline std::size_t count() const { return  *std::max_element(by_vertices.begin(), by_vertices.end()); }
 };
 
 template <typename G>
